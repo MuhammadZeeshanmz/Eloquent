@@ -6,26 +6,32 @@ use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Category;
 use App\Models\Product;
+use App\Traits\ProductTrait;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function index() {
-        
-    }
+    use ProductTrait;
+    public function index() {}
     public function store(ProductRequest $request)
     {
         try {
 
-            $data = Product::create([
-                'name' => $request->name,
-                'category_id' => $request->category_id,
-                'description' => $request->description,
-                'quantity' => $request->quantity,
-                'price' => $request->price,
+            $product = new product();
+            $saved = $this->saveProduct($product, $request->all());
+            return new ProductResource($saved);
 
-            ]);
-            return $data;
+
+
+            // $data = Product::create([
+            //     'name' => $request->name,
+            //     'category_id' => $request->category_id,
+            //     'description' => $request->description,
+            //     'quantity' => $request->quantity,
+            //     'price' => $request->price,
+
+            // ]);
+            // return $data;
         } catch (\Throwable $th) {
             return $th;
         }
