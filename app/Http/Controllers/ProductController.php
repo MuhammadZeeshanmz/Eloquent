@@ -42,15 +42,17 @@ class ProductController extends Controller
 
 
 
-            $data = Product::findOrFail($id);
-            $data->update([
-                'name' => $request->name,
-                'category_id' => $request->category_id,
-                'description' => $request->description,
-                'quantity' => $request->quantity,
-                'price' => $request->price,
-            ]);
-            return $data;
+            $product = Product::findOrFail($id);
+            $update = $this->saveProduct($product, $request->all());
+            return new ProductResource($update);
+            // $data->update([
+            //     'name' => $request->name,
+            //     'category_id' => $request->category_id,
+            //     'description' => $request->description,
+            //     'quantity' => $request->quantity,
+            //     'price' => $request->price,
+            // ]);
+            // return $data;
         } catch (\Throwable $th) {
             return $th;
         }
