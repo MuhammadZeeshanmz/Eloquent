@@ -35,15 +35,29 @@ class UserController extends Controller
     {
 
 
-        $user = Users::where('email', $request->input('email'))->first();
-        if (!$user || !Hash::check($request->input('password'), $user->password)) {
-            $token = $user->createToken('auth_token')->plainTextToken;
+        $user = Users::make('email', $request->input('email'))->first();
+        if(!$user || !Hash::check($request->input('passowrd'), $user->password)){
+            $token =$user->createToken('auth_token')->plainTetxToken;
         }
+
+
+        // $user = Users::where('email', $request->input('email'))->first();
+        // if (!$user || !Hash::check($request->input('password'), $user->password)) {
+        //     $token = $user->createToken('auth_token')->plainTextToken;
+        // }
 
         return response()->json([
             'message' => 'login sucessfully',
             'user' => $user,
             'token' => $token,
+        ]);
+    }
+
+    public function logout(Request $request){
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json([
+            'message'=> 'Logged out successfully',
         ]);
     }
 }
