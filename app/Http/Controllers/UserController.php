@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Service\UserService;
 // use App\Models\Users;
 use App\Traits\ApiTrait;
 use Dotenv\Exception\ValidationException;
@@ -15,15 +16,26 @@ class UserController extends Controller
 {
     use ApiTrait;
 
+    protected $userService;
+
+
+    public function __construct(UserService $userService)
+    {
+        return $this->userService = $userService;
+    }
+
     public function register(Request $request)
     {
         try {
-            $data = User::create([
-                'name' => $request->input('name'),
-                'email' => $request->input('email'),
-                'password' => Hash::make($request->input('password')),
+            $data = $this->userService->createUser($request);
+            // $data = User::create([
+            //     'name' => $request->input('name'),
+            //     'email' => $request->input('email'),
+            //     'password' => Hash::make($request->input('password')),
 
-            ]);
+            // ]);
+
+            // return $this->success('Register successfully', $data, );
 
             return response()->json([
                 'user' => $data,
@@ -42,7 +54,7 @@ class UserController extends Controller
                 return $this->error('invalid password');
             }
             $token = $user->createToken('auth_token')->plainTextToken;
-            return $this->success('login successfully', $token, $user);
+            return $this->success('login successfully', $token,  $user,  201);
         } catch (\Throwable $th) {
             // return $th;
             return $this->error('invalid ');
