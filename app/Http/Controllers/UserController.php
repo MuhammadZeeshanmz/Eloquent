@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Users;
+// use App\Models\Users;
+use App\Traits\ApiTrait;
 use Dotenv\Exception\ValidationException;
 use Exception;
 use Illuminate\Http\Request;
@@ -12,11 +13,12 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    use ApiTrait;
 
     public function register(Request $request)
     {
         try {
-            $data = Users::create([
+            $data = User::create([
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
                 'password' => Hash::make($request->input('password')),
@@ -33,31 +35,26 @@ class UserController extends Controller
 
     public function login(Request $request)
     {
+        try {
 
-
-        $user = Users::make('email', $request->input('email'))->first();
-        if(!$user || !Hash::check($request->input('passowrd'), $user->password)){
-            $token =$user->createToken('auth_token')->plainTetxToken;
+            $user = User::where('email', $request->input('email'))->first();
+            if (!$user || !Hash::check($request->input('password'), $user->password)) {
+                return $this->error('invalid password');
+            }
+            $token = $user->createToken('auth_token')->plainTextToken;
+            return $this->success('login successfully', $token, $user);
+        } catch (\Throwable $th) {
+            // return $th;
+            return $this->error('invalid ');
         }
-
-
-        // $user = Users::where('email', $request->input('email'))->first();
-        // if (!$user || !Hash::check($request->input('password'), $user->password)) {
-        //     $token = $user->createToken('auth_token')->plainTextToken;
-        // }
-
-        return response()->json([
-            'message' => 'login sucessfully',
-            'user' => $user,
-            'token' => $token,
-        ]);
     }
 
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([
-            'message'=> 'Logged out successfully',
+            'message' => 'Logged out successfully',
         ]);
     }
 }
