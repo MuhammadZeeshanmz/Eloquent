@@ -16,6 +16,7 @@ class UserService
             'name'=> $request->input('name'),
             'email'=> $request->input('email'),
             'password'=> Hash::make($request->input('password')),
+            'role_permission_id'=>$request->input('role_permission_id'),
         ]);
         return $data;
 

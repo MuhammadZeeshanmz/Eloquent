@@ -24,10 +24,15 @@ class UserController extends Controller
         return $this->userService = $userService;
     }
 
+    public function index(){
+        $role = User::with('role')->get();
+    }
+
     public function register(Request $request)
     {
         try {
             $data = $this->userService->createUser($request);
+
             // $data = User::create([
             //     'name' => $request->input('name'),
             //     'email' => $request->input('email'),
@@ -49,15 +54,18 @@ class UserController extends Controller
     {
         try {
 
-            $user = User::where('email', $request->input('email'))->first();
+            $user = User::with('rolePermission.role','rolePermission.permissions')->where('email', $request->input('email'))->first();
             if (!$user || !Hash::check($request->input('password'), $user->password)) {
-                return $this->error('invalid password');
+                // return $this->error('invalid password');
             }
+            
+
+            
             $token = $user->createToken('auth_token')->plainTextToken;
             $user->token = $token;
             return $this->success('login successfully',  $user,  201);
         } catch (\Throwable $th) {
-            // return $th;
+            return $th;
             return $this->error('invalid ');
         }
     }
@@ -73,4 +81,5 @@ class UserController extends Controller
             'message' => 'Logged out successfully',
         ]);
     }
+    
 }

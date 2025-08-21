@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Routing\Route;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Model
@@ -15,7 +16,13 @@ class User extends Model
     protected $fillable = [
         'name',
         'email',
-        'password'
+        'password',
+        'role_permission_id'
 
     ];
+
+    public function rolePermission(){
+
+        return $this->belongsTo(RolePermission::class, 'role_permission_id');
+    }
 }
