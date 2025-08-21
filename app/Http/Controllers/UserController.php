@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\RoleResource;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Service\UserService;
 // use App\Models\Users;
@@ -24,7 +26,8 @@ class UserController extends Controller
         return $this->userService = $userService;
     }
 
-    public function index(){
+    public function index()
+    {
         $role = User::with('role')->get();
     }
 
@@ -54,16 +57,18 @@ class UserController extends Controller
     {
         try {
 
-            $user = User::with('rolePermission.role','rolePermission.permissions')->where('email', $request->input('email'))->first();
+            $user = User::with('role.permissions')->where('email', $request->input('email'))->first();
             if (!$user || !Hash::check($request->input('password'), $user->password)) {
                 // return $this->error('invalid password');
             }
-            
 
-            
+
+
             $token = $user->createToken('auth_token')->plainTextToken;
             $user->token = $token;
-            return $this->success('login successfully',  $user,  201);
+   
+            return $this->success('login successfully',  new UserResource($user),  201);
+            return new RoleResource($user);
         } catch (\Throwable $th) {
             return $th;
             return $this->error('invalid ');
@@ -81,5 +86,4 @@ class UserController extends Controller
             'message' => 'Logged out successfully',
         ]);
     }
-    
 }
