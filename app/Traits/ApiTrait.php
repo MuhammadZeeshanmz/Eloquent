@@ -5,10 +5,9 @@ use App\Models\Users;
 
 trait ApiTrait
 {
-    public function success( string $msg, $token = null, $data = [], $code = 200){
+    public function success( string $msg,  $data = [], $code = 200){
         return response()->json([
             'message'=> $msg,
-            'token'=> $token,
             'data'=> $data,
          
         ], $code

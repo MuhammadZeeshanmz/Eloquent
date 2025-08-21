@@ -54,7 +54,8 @@ class UserController extends Controller
                 return $this->error('invalid password');
             }
             $token = $user->createToken('auth_token')->plainTextToken;
-            return $this->success('login successfully', $token,  $user,  201);
+            $user->token = $token;
+            return $this->success('login successfully',  $user,  201);
         } catch (\Throwable $th) {
             // return $th;
             return $this->error('invalid ');
@@ -64,6 +65,9 @@ class UserController extends Controller
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
+
+
+        // return $this->success('Logged out successfully');
 
         return response()->json([
             'message' => 'Logged out successfully',
