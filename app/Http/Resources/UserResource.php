@@ -19,18 +19,8 @@ class UserResource extends JsonResource
             'name'  => $this->name,
             'email' => $this->email,
             'token' => $this->token ?? null,
-            'role' => [
-                'id' => $this->role->id,
-                'Role_name' => $this->role->Role_name,
-                'permissions' => $this->role
-                    ? $this->role->permissions->map(function ($permission) {
-                        return [
-                            'id' => $permission->id,
-                            'name' => $permission->name,
-                        ];
-                    })
-                    : [],
-            ],
+            'role' => new RoleResource($this->whenLoaded('role')),
+          
 
         ];
     }

@@ -16,6 +16,7 @@ class Role extends Model
     ];
     
     public function Permissions() {
-        return $this->belongsToMany(Permission::class)->withPivot('user_name','created_at');
+        return $this->belongsToMany(Permission::class);
+        // >withPivot('user_name','created_at');
     }
 }

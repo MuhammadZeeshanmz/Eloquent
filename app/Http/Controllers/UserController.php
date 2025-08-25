@@ -59,7 +59,7 @@ class UserController extends Controller
 
             $user = User::with('role.permissions')->where('email', $request->input('email'))->first();
             if (!$user || !Hash::check($request->input('password'), $user->password)) {
-                // return $this->error('invalid password');
+                return $this->error('invalid password');
             }
 
 

@@ -6,3 +6,47 @@
     "price": 200
 }
 ->select(['id', 'name', 'category_id']);
+    // $data = Product::create([
+            //     'name' => $request->name,
+            //     'category_id' => $request->category_id,
+            //     'description' => $request->description,
+            //     'quantity' => $request->quantity,
+            //     'price' => $request->price,
+
+            // ]);
+            // return $data;
+
+
+             // $data->update([
+            //     'name' => $request->name,
+            //     'category_id' => $request->category_id,
+            //     'description' => $request->description,
+            //     'quantity' => $request->quantity,
+            //     'price' => $request->price,
+            // ]);
+            // return $data;
+            {
+    "name": "Electronic",
+    "products": [
+        {
+            "id": 9,
+            "name": "tv",
+            "description": "hdfdfj",
+            "quantity": 2,
+            "price": 500
+        },
+        {
+            "id": 10,
+            "name": "Tablet",
+            "description": "hdjdrt",
+            "quantity": 2,
+            "price": 500
+        },
+        {
+            "name": "Mobile",
+            "description": "hdjert",
+            "quantity": 2,
+            "price": 500
+        }
+    ]
+}
